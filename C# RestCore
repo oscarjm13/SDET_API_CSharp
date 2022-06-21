@@ -1,0 +1,37 @@
+ public RestRequest CreateRequestWithHeaders(string methodType)
+        {
+            switch (methodType.ToUpper())
+            {
+                case "GET":
+                    restRequest = new RestRequest(requestURL, Method.GET);
+                    break;
+
+                case "POST":
+                    restRequest = new RestRequest(requestURL, Method.POST);
+                    break;
+
+                case "PUT":
+                    restRequest = new RestRequest(requestURL, Method.PUT);
+                    break;
+
+                case "DELETE":
+                    restRequest = new RestRequest(requestURL, Method.DELETE);
+                    break;
+
+                default:
+                    throw new NotImplementedException($"Rest Method not valid. Must specifiy correctly. Current value: [{methodType}]" +
+                                                      $"Current valid types: Get and Post");
+            }
+            restRequest.RequestFormat = DataFormat.Json;
+            return restRequest;
+        }
+
+        public IRestResponse AddRequestBody(RestRequest restRequest)
+        {
+            restRequest.AddParameter("application/json; charset=utf-8", ParameterType.RequestBody);
+            IRestResponse serviceReponse = restClient.Execute(restRequest);
+
+            LogRequestBody(restRequest);
+
+            return serviceReponse;
+        }
